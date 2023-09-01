@@ -36,4 +36,15 @@ dependencies {
 
     testImplementation(libs.server.tests)
     testImplementation(libs.kotlin.test.junit)
+    testImplementation("io.ktor:ktor-server-test-host-jvm:2.3.4")
 }
+
+tasks.jar {
+    archiveBaseName.set("app")
+    archiveVersion.set("0.0.1")
+    manifest {
+        attributes["Main-Class"] = "io.ktor.server.netty.EngineMain"
+    }
+    from(sourceSets.main.get().output)
+}
+

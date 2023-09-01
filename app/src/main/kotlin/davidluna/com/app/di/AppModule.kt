@@ -17,13 +17,14 @@ import davidluna.com.domain.JwtConfiguration
 import davidluna.com.usecases.GetUserByUsernameUseCase
 import davidluna.com.usecases.LoginUseCase
 import davidluna.com.usecases.SaveUserUseCase
+import org.koin.core.module.Module
 import org.koin.core.module.dsl.bind
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
-val appModule = module {
+val appModule: Module = module {
     factory {
         provideJWTProperties(
             getProperty("issuer"),
@@ -70,13 +71,11 @@ private fun provideJWTProperties(
     audience: String,
     realm: String,
     domain: String,
-): JwtConfiguration {
-    return JwtConfiguration(
-        secret = System.getenv("SECRET") ?: "",
-        issuer = issuer,
-        audience = audience,
-        realm = realm,
-        domain = domain,
-        expiration = 600L * 1000L
-    )
-}
+): JwtConfiguration = JwtConfiguration(
+    secret = System.getenv("SECRET") ?: "",
+    issuer = issuer,
+    audience = audience,
+    realm = realm,
+    domain = domain,
+    expiration = 600L * 1000L
+)

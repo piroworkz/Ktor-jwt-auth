@@ -13,7 +13,7 @@ fun buildFailResponse(error: AppError, token: String = ""): RemoteResponse<Strin
     ),
     message = error.description,
     token = token,
-    response = ""
+    body = ""
 )
 
 fun <T> Response<T>.toRemote(): RemoteResponse<T> = RemoteResponse(
@@ -23,7 +23,7 @@ fun <T> Response<T>.toRemote(): RemoteResponse<T> = RemoteResponse(
     ),
     message = message,
     token = token,
-    response = response
+    body = body
 )
 
 fun Response<User>.toRemoteUser(): RemoteResponse<SerializedUser> = RemoteResponse(
@@ -33,16 +33,18 @@ fun Response<User>.toRemoteUser(): RemoteResponse<SerializedUser> = RemoteRespon
     ),
     message = message,
     token = token,
-    response = response.toRemote()
+    body = body.toRemote()
 )
 
 private fun User.toRemote(): SerializedUser = SerializedUser(
     username = username,
     password = password,
-    salt = salt
+    salt = salt,
+    role = role.name
 )
 
 fun RemoteAuthRequest.toDomain(): AuthRequest = AuthRequest(
     username = username,
-    password = password
+    password = password,
+    role = role
 )

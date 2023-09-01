@@ -7,5 +7,5 @@ fun <T> buildSuccessResponse(response: T, token: String = ""): Response<T> = Res
     code = HttpStatusCode.OK,
     message = "Success",
     token = token,
-    response = response
+    body = response
 )

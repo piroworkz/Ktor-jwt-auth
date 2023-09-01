@@ -9,5 +9,6 @@ data class RemoteUser(
     val username: String,
     val password: String,
     val salt: String,
+    val role: String
 )
 

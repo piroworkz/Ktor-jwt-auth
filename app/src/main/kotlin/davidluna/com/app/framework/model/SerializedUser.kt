@@ -7,4 +7,5 @@ data class SerializedUser(
     val username: String,
     val password: String,
     val salt: String,
+    val role: String
 )

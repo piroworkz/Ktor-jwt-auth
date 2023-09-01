@@ -17,16 +17,23 @@ class UserRepository(
         remote.getUserByUserName(userName)
 
 
-    suspend fun saveUser(request: AuthRequest): Either<AppError, Response<Boolean>> =
-        remote.saveUser(request, hashService.hash(request.password))
-            .map { buildSuccessResponse(it, createJWTToken(request.username)) }
-
-    suspend fun login(request: AuthRequest): Either<AppError, Response<User>> = either {
-        buildSuccessResponse(user(request), createJWTToken(request.username))
+    suspend fun saveUser(request: AuthRequest): Either<AppError, Response<Boolean>> = either {
+        buildSuccessResponse(isUserSaved(request), createJWTToken(request))
     }
 
-    private fun createJWTToken(user: String): String =
-        tokenService.generateToken(JWTClaim(User::username.name, user))
+    suspend fun login(request: AuthRequest): Either<AppError, Response<User>> = either {
+        buildSuccessResponse(user(request), createJWTToken(request))
+    }
+
+
+    private suspend fun Raise<AppError>.isUserSaved(request: AuthRequest): Boolean {
+        val user: User? = remote.getUserByUserName(request.username).bind()
+        if (user != null) raise(AppError.AccountExists())
+        val saltedHash = hashService.hash(request.password)
+        val isSaved = remote.saveUser(request, saltedHash).bind()
+        if (!isSaved) raise(AppError.IOError())
+        return isSaved
+    }
 
     private suspend fun Raise<AppError>.user(request: AuthRequest): User {
         val user = remote.getUserByUserName(request.username).bind() ?: raise(AppError.UserNotFound())
@@ -36,4 +43,10 @@ class UserRepository(
         }
         return user
     }
+
+    private fun createJWTToken(user: AuthRequest): String =
+        tokenService.generateToken(
+            JWTClaim(User::username.name, user.username),
+            JWTClaim(User::role.name, user.role.name)
+        )
 }

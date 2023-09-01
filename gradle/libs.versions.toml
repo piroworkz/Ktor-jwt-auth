@@ -7,7 +7,6 @@ commons-codec = "1.16.0"
 koin = "3.4.3"
 mongo-db-driver = "4.10.1"
 mongo-bson = "4.10.1"
-
 javax-inject = "1"
 org-jetbrains-kotlin-jvm = "1.8.21"
 

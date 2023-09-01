@@ -17,22 +17,11 @@ import kotlinx.coroutines.flow.firstOrNull
 class RemoteUserDataSource(dataBase: MongoDatabase) : UserDataSource {
 
     private val collection = dataBase.getCollection<RemoteUser>("users")
+
     override suspend fun getUserByUserName(userName: String): Either<AppError, User?> =
-        tryCatchSuspended { findUserByName(userName) }
+        tryCatchSuspended { collection.find(eq(RemoteUser::username.name, userName)).firstOrNull().toDomain() }
 
     override suspend fun saveUser(request: AuthRequest, saltedHash: SaltedHash): Either<AppError, Boolean> =
-        tryCatchSuspended {
-            val user: User? = findUserByName(request.username)
-            if (user != null) throw AppError.AccountExists()
-            if (!insertUser(request, saltedHash)) throw AppError.IOError()
-            true
-        }
+        tryCatchSuspended { collection.insertOne(request.toRemote(saltedHash)).wasAcknowledged() }
 
-    private suspend fun insertUser(request: AuthRequest, saltedHash: SaltedHash): Boolean {
-        return collection.insertOne(request.toRemote(saltedHash)).wasAcknowledged()
-    }
-
-    private suspend fun findUserByName(username: String): User? {
-        return collection.find(eq(RemoteUser::username.name, username)).firstOrNull().toDomain()
-    }
 }

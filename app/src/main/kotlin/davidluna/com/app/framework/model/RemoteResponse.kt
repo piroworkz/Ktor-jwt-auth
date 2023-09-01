@@ -7,5 +7,5 @@ data class RemoteResponse<T>(
     val code: RemoteStatusCode,
     val message: String,
     val token: String,
-    val response: T,
+    val body: T,
 )

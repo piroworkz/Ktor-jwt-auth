@@ -6,5 +6,5 @@ data class Response<T>(
     val code: HttpStatusCode,
     val message: String,
     val token: String,
-    val response: T,
+    val body: T,
 )

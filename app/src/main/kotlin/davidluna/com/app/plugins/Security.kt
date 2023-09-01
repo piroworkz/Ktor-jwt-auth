@@ -2,8 +2,10 @@ package davidluna.com.app.plugins
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
+import davidluna.com.app.framework.model.RemoteResponse
+import davidluna.com.app.framework.model.RemoteStatusCode
 import davidluna.com.domain.JwtConfiguration
-import io.ktor.http.auth.*
+import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
@@ -29,16 +31,25 @@ fun Application.configureSecurity() {
                 }
             }
 
-            challenge { _, realm ->
-                val domain = config.domain
-                val error = "Unauthorized"
-                val description = "Access denied: invalid credentials"
-                val authenticateHeader =
-                    "Basic realm=\"$realm\", error=\"$error\", error_description=\"$description\", domain=\"$domain\""
-                call.respond(UnauthorizedResponse(HttpAuthHeader.Single("WWW-Authenticate", authenticateHeader)))
+            challenge { _, _ ->
+                call.respond(HttpStatusCode.Unauthorized, buildFailAuthResponse())
             }
         }
     }
 }
 
 
+private fun buildFailAuthResponse(): RemoteResponse<RemoteStatusCode> {
+    return RemoteResponse(
+        code = RemoteStatusCode(
+            HttpStatusCode.Unauthorized.value,
+            HttpStatusCode.Unauthorized.description
+        ),
+        message = "Access denied: invalid credentials",
+        token = "",
+        body = RemoteStatusCode(
+            HttpStatusCode.Unauthorized.value,
+            HttpStatusCode.Unauthorized.description
+        )
+    )
+}
