@@ -2,7 +2,7 @@ plugins {
     kotlin("jvm") version "1.8.21"
     id("io.ktor.plugin") version "2.3.3"
     id("org.jetbrains.kotlin.plugin.serialization") version "1.8.21"
-    application
+    id("war")
 }
 
 
@@ -33,6 +33,7 @@ dependencies {
     implementation(libs.koin.di)
     implementation(libs.koin.logger)
     implementation(libs.javax.inject)
+    implementation(libs.servlet.jakarta)
 
     testImplementation(libs.server.tests)
     testImplementation(libs.kotlin.test.junit)

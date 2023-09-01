@@ -19,12 +19,13 @@ server-swagger = { group = "io.ktor", name = "ktor-server-swagger-jvm", version.
 server-call-logging = { group = "io.ktor", name = "ktor-server-call-logging-jvm", version.ref = "ktor" }
 server-netty = { group = "io.ktor", name = "ktor-server-netty-jvm", version.ref = "ktor" }
 server-content-negotiation = { group = "io.ktor", name = "ktor-server-content-negotiation-jvm", version.ref = "kotlin" }
+servlet-jakarta = { group = "io.ktor", name = "ktor-server-servlet-jakarta", version.ref = "ktor" }
 kotlin-serialization-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json-jvm", version.ref = "kotlin" }
-logback-classic = { group = "ch.qos.logback", name = "logback-classic", version.ref = "logback" }
 arrow-core = { module = "io.arrow-kt:arrow-core", version.ref = "arrow" }
-commons-codec = { group = "commons-codec", name = "commons-codec", version.ref = "commons-codec" }
 koin-di = { group = "io.insert-koin", name = "koin-ktor", version.ref = "koin" }
 koin-logger = { group = "io.insert-koin", name = "koin-logger-slf4j", version.ref = "koin" }
+logback-classic = { group = "ch.qos.logback", name = "logback-classic", version.ref = "logback" }
+commons-codec = { group = "commons-codec", name = "commons-codec", version.ref = "commons-codec" }
 mongo-db-driver = { group = "org.mongodb", name = "mongodb-driver-kotlin-coroutine", version.ref = "mongo-db-driver" }
 mongo-bson = { group = "org.mongodb", name = "bson", version.ref = "mongo-bson" }
 javax-inject = { group = "javax.inject", name = "javax.inject", version.ref = "javax-inject" }

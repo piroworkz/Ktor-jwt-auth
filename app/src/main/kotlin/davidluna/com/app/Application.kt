@@ -3,6 +3,7 @@ package davidluna.com.app
 import davidluna.com.app.di.appModule
 import davidluna.com.app.plugins.*
 import io.ktor.server.application.*
+import io.ktor.server.netty.*
 import org.koin.core.context.startKoin
 import org.koin.core.logger.Level
 import org.koin.fileProperties
@@ -14,7 +15,7 @@ fun main(args: Array<String>) {
         fileProperties("/koin.properties")
         modules(appModule)
     }
-    io.ktor.server.netty.EngineMain.main(args)
+    EngineMain.main(args)
 }
 
 fun Application.module() {

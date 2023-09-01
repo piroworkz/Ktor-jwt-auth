@@ -1,0 +1,16 @@
+<web-app>
+    <servlet>
+        <display-name>KtorServletRestApi</display-name>
+        <servlet-name>KtorServletRestApi</servlet-name>
+        <servlet-class>io.ktor.server.servlet.jakarta.ServletApplicationEngine</servlet-class>
+        <init-param>
+            <param-name>io.ktor.ktor.config</param-name>
+            <param-value>application.conf</param-value>
+        </init-param>
+        <async-supported>true</async-supported>
+        <servlet-mapping>
+            <servlet-name>KtorServletRestApi</servlet-name>
+            <url-pattern>/</url-pattern>
+        </servlet-mapping>
+    </servlet>
+</web-app>

@@ -35,6 +35,9 @@ fun Application.configureSecurity() {
                 call.respond(HttpStatusCode.Unauthorized, buildFailAuthResponse())
             }
         }
+        basic("auth-basic") {
+//            config basic auth
+        }
     }
 }
 

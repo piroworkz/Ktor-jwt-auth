@@ -74,7 +74,10 @@ components:
     AppError:
       type: "object"
       properties:
-      # tus propiedades aquí
+        code:
+          type: "string"
+        description:
+          type: "string"
     LoginResponse:
       type: "object"
       properties:
