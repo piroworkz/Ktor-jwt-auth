@@ -1,0 +1,115 @@
+openapi: "3.0.3"
+info:
+  title: "Application API"
+  description: "Application API"
+  version: "1.0.0"
+servers:
+  - url: "http://0.0.0.0:8080"
+paths:
+  /:
+    get:
+      description: "Hello World!"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            text/plain:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "Hello World!"
+  /auth/login:
+    post:
+      description: "Iniciar sesión"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuthRequest"
+      responses:
+        "200":
+          description: "Inicio de sesión exitoso"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoginResponse"
+        default:
+          description: "Error al iniciar sesión"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppError"
+  /auth/register:
+    post:
+      description: "Registrarse"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuthRequest"
+      responses:
+        "200":
+          description: "Registro exitoso"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RegisterResponse"
+        default:
+          description: "Error al registrarse"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppError"
+
+components:
+  schemas:
+    AuthRequest:
+      type: "object"
+      properties:
+        username:
+          type: "string"
+        password:
+          type: "string"
+    AppError:
+      type: "object"
+      properties:
+      # tus propiedades aquí
+    LoginResponse:
+      type: "object"
+      properties:
+        code:
+          $ref: "#/components/schemas/Code"
+        message:
+          type: "string"
+        token:
+          type: "string"
+        response:
+          $ref: "#/components/schemas/UserDetails"
+    RegisterResponse:
+      type: "object"
+      properties:
+        code:
+          $ref: "#/components/schemas/Code"
+        message:
+          type: "string"
+        token:
+          type: "string"
+        response:
+          type: "boolean"
+    Code:
+      type: "object"
+      properties:
+        code:
+          type: "integer"
+        description:
+          type: "string"
+    UserDetails:
+      type: "object"
+      properties:
+        username:
+          type: "string"
+        password:
+          type: "string"
+        salt:
+          type: "string"
