@@ -27,15 +27,16 @@ import org.koin.dsl.module
 val appModule: Module = module {
     factory {
         provideJWTProperties(
+            getProperty("SECRET"),
             getProperty("issuer"),
             getProperty("audience"),
             getProperty("realm"),
             getProperty("domain"),
         )
     }
-    single(named("MONGO_DB_STRING")) { provideConnectionString() }
-    single { provideServerApi() }
+    single(named("MONGO_DB_STRING")) { getProperty<String>("MONGODB") }
     single { provideMongoClientSettings(get(named("MONGO_DB_STRING")), get()) }
+    single { provideServerApi() }
     single { provideDatabase(get()) }
     singleOf(::LocalHashDataSource) { bind<HashService>() }
     singleOf(::LocalJWTDataSource) { bind<JWTService>() }
@@ -45,10 +46,6 @@ val appModule: Module = module {
     factoryOf(::SaveUserUseCase)
     singleOf(::UserRepository)
 }
-
-private fun provideConnectionString(): String =
-    System.getenv("MONGODB") ?: ""
-
 
 private fun provideServerApi(): ServerApi = ServerApi.builder()
     .version(ServerApiVersion.V1)
@@ -67,12 +64,13 @@ private fun provideDatabase(mongoClientSettings: MongoClientSettings): MongoData
     MongoClient.create(mongoClientSettings).getDatabase("piroworkz")
 
 private fun provideJWTProperties(
+    secret: String,
     issuer: String,
     audience: String,
     realm: String,
     domain: String,
 ): JwtConfiguration = JwtConfiguration(
-    secret = System.getenv("SECRET") ?: "",
+    secret = secret,
     issuer = issuer,
     audience = audience,
     realm = realm,

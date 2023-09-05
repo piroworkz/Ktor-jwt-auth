@@ -1,20 +1,19 @@
 package davidluna.com.app.framework.remote
 
-import davidluna.com.app.framework.model.RemoteUser
+import davidluna.com.app.framework.remote.entities.MongoUser
 import davidluna.com.domain.AuthRequest
 import davidluna.com.domain.Role
 import davidluna.com.domain.SaltedHash
 import davidluna.com.domain.User
 
-fun AuthRequest.toRemote(saltedHash: SaltedHash): RemoteUser = RemoteUser(
+fun AuthRequest.toRemote(saltedHash: SaltedHash): MongoUser = MongoUser(
     username = username,
     password = saltedHash.hash,
     salt = saltedHash.salt,
     role = role.name
 )
 
-fun RemoteUser?.toDomain(): User? = if (this != null) {
-    println("<-- received from database $this")
+fun MongoUser?.toDomain(): User? = if (this != null) {
     User(
         username = username,
         password = password,

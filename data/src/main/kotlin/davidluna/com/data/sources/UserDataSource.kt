@@ -9,4 +9,5 @@ import davidluna.com.domain.User
 interface UserDataSource {
     suspend fun getUserByUserName(userName: String): Either<AppError, User?>
     suspend fun saveUser(request: AuthRequest, saltedHash: SaltedHash): Either<AppError, Boolean>
+    suspend fun updateUser(request: AuthRequest, saltedHash: SaltedHash): Either<AppError, Boolean>
 }

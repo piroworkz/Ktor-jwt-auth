@@ -1,9 +1,9 @@
-package davidluna.com.app.framework.model
+package davidluna.com.app.framework.remote.entities
 
 import org.bson.codecs.pojo.annotations.BsonId
 import org.bson.types.ObjectId
 
-data class RemoteUser(
+data class MongoUser(
     @BsonId
     val id: ObjectId = ObjectId(),
     val username: String,
