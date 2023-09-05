@@ -16,37 +16,35 @@ class UserRepository(
     suspend fun getUserByUserName(userName: String): Either<AppError, User?> =
         remote.getUserByUserName(userName)
 
-
     suspend fun saveUser(request: AuthRequest): Either<AppError, Response<Boolean>> = either {
         buildSuccessResponse(isUserSaved(request), createJWTToken(request))
     }
 
     suspend fun login(request: AuthRequest): Either<AppError, Response<User>> = either {
-        buildSuccessResponse(user(request), createJWTToken(request))
+        buildSuccessResponse(verifyLogin(request), createJWTToken(request))
     }
-
 
     private suspend fun Raise<AppError>.isUserSaved(request: AuthRequest): Boolean {
-        val user: User? = remote.getUserByUserName(request.username).bind()
-        if (user != null) raise(AppError.AccountExists())
+        val user: User? = getUserByUserName(request.username).bind()
+        if (user != null) raise(AppError.AccountExists(400))
         val saltedHash = hashService.hash(request.password)
         val isSaved = remote.saveUser(request, saltedHash).bind()
-        if (!isSaved) raise(AppError.IOError())
-        return isSaved
+        if (!isSaved) raise(AppError.IOError(500))
+        return true
     }
 
-    private suspend fun Raise<AppError>.user(request: AuthRequest): User {
-        val user = remote.getUserByUserName(request.username).bind() ?: raise(AppError.UserNotFound())
+    private suspend fun Raise<AppError>.verifyLogin(request: AuthRequest): User {
+        val user = getUserByUserName(request.username).bind() ?: raise(AppError.UserNotFound(400))
         val saltedHash = SaltedHash(user.salt, user.password)
         if (!hashService.check(request.password, saltedHash)) {
-            raise(AppError.UnAuthorized())
+            raise(AppError.UnAuthorized(401))
         }
         return user
     }
 
-    private fun createJWTToken(user: AuthRequest): String =
+    private suspend fun createJWTToken(user: AuthRequest): String =
         tokenService.generateToken(
             JWTClaim(User::username.name, user.username),
             JWTClaim(User::role.name, user.role.name)
-        )
+        ).fold(ifLeft = { "" }, ifRight = { it })
 }

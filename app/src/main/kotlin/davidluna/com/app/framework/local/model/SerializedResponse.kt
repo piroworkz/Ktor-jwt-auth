@@ -1,10 +1,10 @@
-package davidluna.com.app.framework.model
+package davidluna.com.app.framework.local.model
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class RemoteResponse<T>(
-    val code: RemoteStatusCode,
+data class SerializedResponse<T>(
+    val code: SerializedStatusCode,
     val message: String,
     val token: String,
     val body: T,

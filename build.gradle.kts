@@ -9,15 +9,15 @@ allprojects {
 }
 
 subprojects {
-    apply(plugin = "kotlin")
-
+    plugins.apply("kotlin")
+    plugins.apply("war")
     repositories {
         mavenCentral()
     }
 
     afterEvaluate {
-        dependencies {
-            "testImplementation"(kotlin("test", libs.versions.kotlin.get()))
+        dependencies.apply {
+            add("testImplementation", libs.bundles.server.tests)
         }
     }
 }
