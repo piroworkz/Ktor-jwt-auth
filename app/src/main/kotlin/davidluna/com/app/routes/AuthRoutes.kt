@@ -1,6 +1,6 @@
 package davidluna.com.app.routes
 
-import davidluna.com.app.framework.local.model.SerializedAuthRequest
+import davidluna.com.app.model.SerializedAuthRequest
 import davidluna.com.app.framework.utils.buildFailResponse
 import davidluna.com.app.framework.utils.toDomain
 import davidluna.com.app.framework.utils.toRemote

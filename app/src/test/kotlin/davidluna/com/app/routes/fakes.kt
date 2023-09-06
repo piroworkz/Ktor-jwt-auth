@@ -1,6 +1,6 @@
 package davidluna.com.app.routes
 
-import davidluna.com.app.framework.local.model.SerializedAuthRequest
+import davidluna.com.app.model.SerializedAuthRequest
 
 
 val loginRequest = SerializedAuthRequest(

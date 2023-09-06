@@ -1,20 +1,22 @@
 package davidluna.com.app.routes
 
 
-import davidluna.com.app.framework.local.model.SerializedResponse
-import davidluna.com.app.framework.local.model.SerializedUser
+import com.google.common.truth.Truth.assertThat
+import davidluna.com.app.model.SerializedResponse
+import davidluna.com.app.model.SerializedUser
+import davidluna.com.domain.AppError
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.http.HttpStatusCode.Companion.OK
-import io.ktor.http.HttpStatusCode.Companion.Unauthorized
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.testing.*
 import kotlinx.serialization.json.Json
 import org.junit.After
 import org.koin.core.context.GlobalContext.stopKoin
+import kotlin.random.Random
 import kotlin.test.Test
 
 class AuthRoutesTest {
@@ -25,7 +27,7 @@ class AuthRoutesTest {
     }
 
     @Test
-    fun testSuccessLoginRoute() = testApplication {
+    fun `given a valid loginRequest when service is called should return expected Success message`() = testApplication {
         val httpClient = initClient()
         val expected = "Success"
         val response = httpClient.post("/auth/login") {
@@ -33,25 +35,65 @@ class AuthRoutesTest {
             setBody(loginRequest)
         }
         val actual = response.body<SerializedResponse<SerializedUser>>()
-
-        assert(response.status == OK)
-        assert(actual.message == expected)
+        assertThat(actual.code.value).isEqualTo(OK)
+        assertThat(actual.message).isEqualTo(expected)
     }
 
     @Test
-    fun testFailedLoginRoute() = testApplication {
-        val httpClient = initClient()
-        val expected = "Please check your password and try again."
-        val response = httpClient.post("/auth/login") {
-            contentType(ContentType.Application.Json)
-            setBody(loginRequest.copy(password = "wrong password"))
+    fun `given a non valid loginRequest when service is called should return expected Failure message`() =
+        testApplication {
+            val httpClient = initClient()
+            val expected = AppError.UnAuthorized(401)
+            val response = httpClient.post("/auth/login") {
+                contentType(ContentType.Application.Json)
+                setBody(loginRequest.copy(password = "wrong password"))
+            }
+            val actual = response.body<SerializedResponse<String>>()
+            assertThat(actual.code.value).isEqualTo(expected.code)
+            assertThat(actual.message).isEqualTo(expected.description)
         }
-        val actual = response.body<SerializedResponse<String>>()
 
-        assert(actual.code.value == Unauthorized.value)
-        assert(actual.message == expected)
-    }
+    @Test
+    fun `given a non existent loginRequest username when service is called should return expected Failure message`() =
+        testApplication {
+            val httpClient = initClient()
+            val expected = AppError.UserNotFound(400)
+            val response = httpClient.post("/auth/login") {
+                contentType(ContentType.Application.Json)
+                setBody(loginRequest.copy(username = "non existent user"))
+            }
+            val actual = response.body<SerializedResponse<String>>()
+            assertThat(actual.code.value).isEqualTo(expected.code)
+            assertThat(actual.message).isEqualTo(expected.description)
+        }
 
+    @Test
+    fun `given a valid registerRequest when service is called should return expected Success message`() =
+        testApplication {
+            val httpClient = initClient()
+            val expected = "Success"
+            val response = httpClient.post("/auth/register") {
+                contentType(ContentType.Application.Json)
+                setBody(loginRequest.copy(username = "voxel@gmail.com${Random.nextInt()}"))
+            }
+            val actual = response.body<SerializedResponse<Boolean>>()
+            assertThat(actual.code.value).isEqualTo(OK)
+            assertThat(actual.message).isEqualTo(expected)
+        }
+
+    @Test
+    fun `given an already registered username when service is called should return expected Failure message`() =
+        testApplication {
+            val httpClient = initClient()
+            val expected = AppError.AccountExists(400)
+            val response = httpClient.post("/auth/register") {
+                contentType(ContentType.Application.Json)
+                setBody(loginRequest)
+            }
+            val actual = response.body<SerializedResponse<String>>()
+            assertThat(actual.code.value).isEqualTo(expected.code)
+            assertThat(actual.message).isEqualTo(expected.description)
+        }
 
     private fun ApplicationTestBuilder.initClient(): HttpClient {
         return createClient {

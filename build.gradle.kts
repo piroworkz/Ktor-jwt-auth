@@ -1,6 +1,6 @@
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
-    kotlin("jvm") version libs.versions.kotlin apply false
+    kotlin("jvm") version "1.8.21" apply false
 }
 
 allprojects {
@@ -10,11 +10,9 @@ allprojects {
 
 subprojects {
     plugins.apply("kotlin")
-    plugins.apply("war")
     repositories {
         mavenCentral()
     }
-
     afterEvaluate {
         dependencies.apply {
             add("testImplementation", libs.bundles.server.tests)

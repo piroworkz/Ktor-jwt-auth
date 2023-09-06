@@ -1,9 +1,9 @@
 package davidluna.com.app.framework.utils
 
-import davidluna.com.app.framework.local.model.SerializedAuthRequest
-import davidluna.com.app.framework.local.model.SerializedResponse
-import davidluna.com.app.framework.local.model.SerializedStatusCode
-import davidluna.com.app.framework.local.model.SerializedUser
+import davidluna.com.app.model.SerializedAuthRequest
+import davidluna.com.app.model.SerializedResponse
+import davidluna.com.app.model.SerializedStatusCode
+import davidluna.com.app.model.SerializedUser
 import davidluna.com.domain.AppError
 import davidluna.com.domain.AuthRequest
 import davidluna.com.domain.Response

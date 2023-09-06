@@ -1,9 +1,15 @@
 @file:Suppress("VulnerableLibrariesLocal")
 
+plugins {
+    id("war")
+}
+
 dependencies {
     implementation(project(":domain"))
     implementation(project(":data"))
     implementation(libs.arrow.core)
+
+    testImplementation(project(":testShared"))
 }
 
 tasks.jar {

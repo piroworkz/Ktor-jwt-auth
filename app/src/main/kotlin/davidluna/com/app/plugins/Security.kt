@@ -2,8 +2,8 @@ package davidluna.com.app.plugins
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
-import davidluna.com.app.framework.local.model.SerializedResponse
-import davidluna.com.app.framework.local.model.SerializedStatusCode
+import davidluna.com.app.model.SerializedResponse
+import davidluna.com.app.model.SerializedStatusCode
 import davidluna.com.domain.JwtConfiguration
 import io.ktor.http.HttpStatusCode.Companion.Unauthorized
 import io.ktor.server.application.*

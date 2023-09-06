@@ -1,79 +1,17 @@
 package davidluna.com.app.di
 
-import com.mongodb.ConnectionString
-import com.mongodb.MongoClientSettings
-import com.mongodb.ServerApi
-import com.mongodb.ServerApiVersion
-import com.mongodb.kotlin.client.coroutine.MongoClient
-import com.mongodb.kotlin.client.coroutine.MongoDatabase
-import davidluna.com.app.framework.local.sources.LocalHashDataSource
-import davidluna.com.app.framework.local.sources.LocalJWTDataSource
-import davidluna.com.app.framework.remote.sources.RemoteUserDataSource
-import davidluna.com.data.UserRepository
-import davidluna.com.data.sources.HashService
-import davidluna.com.data.sources.JWTService
-import davidluna.com.data.sources.UserDataSource
-import davidluna.com.domain.JwtConfiguration
-import davidluna.com.usecases.GetUserByUsernameUseCase
-import davidluna.com.usecases.LoginUseCase
-import davidluna.com.usecases.SaveUserUseCase
+import davidluna.com.app.di.providers.provideDatabase
+import davidluna.com.app.di.providers.provideJwtConfiguration
+import davidluna.com.app.di.providers.provideMongoClientSettings
+import davidluna.com.app.di.providers.provideServerApi
 import org.koin.core.module.Module
-import org.koin.core.module.dsl.bind
-import org.koin.core.module.dsl.factoryOf
-import org.koin.core.module.dsl.singleOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val appModule: Module = module {
-    factory {
-        provideJWTProperties(
-            getProperty("SECRET"),
-            getProperty("issuer"),
-            getProperty("audience"),
-            getProperty("realm"),
-            getProperty("domain"),
-        )
-    }
+    factory { provideJwtConfiguration() }
     single(named("MONGO_DB_STRING")) { getProperty<String>("MONGODB") }
     single { provideMongoClientSettings(get(named("MONGO_DB_STRING")), get()) }
     single { provideServerApi() }
     single { provideDatabase(get()) }
-    singleOf(::LocalHashDataSource) { bind<HashService>() }
-    singleOf(::LocalJWTDataSource) { bind<JWTService>() }
-    singleOf(::RemoteUserDataSource) { bind<UserDataSource>() }
-    factoryOf(::GetUserByUsernameUseCase)
-    factoryOf(::LoginUseCase)
-    factoryOf(::SaveUserUseCase)
-    singleOf(::UserRepository)
 }
-
-private fun provideServerApi(): ServerApi = ServerApi.builder()
-    .version(ServerApiVersion.V1)
-    .build()
-
-private fun provideMongoClientSettings(
-    connectionString: String,
-    serverApi: ServerApi,
-): MongoClientSettings = MongoClientSettings.builder()
-    .applyConnectionString(ConnectionString(connectionString))
-    .serverApi(serverApi)
-    .build()
-
-
-private fun provideDatabase(mongoClientSettings: MongoClientSettings): MongoDatabase =
-    MongoClient.create(mongoClientSettings).getDatabase("piroworkz")
-
-private fun provideJWTProperties(
-    secret: String,
-    issuer: String,
-    audience: String,
-    realm: String,
-    domain: String,
-): JwtConfiguration = JwtConfiguration(
-    secret = secret,
-    issuer = issuer,
-    audience = audience,
-    realm = realm,
-    domain = domain,
-    expiration = 600L * 1000L
-)

@@ -1,4 +1,4 @@
-package davidluna.com.app.framework.local.model
+package davidluna.com.app.model
 
 import kotlinx.serialization.Serializable
 

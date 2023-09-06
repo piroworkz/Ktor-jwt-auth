@@ -15,10 +15,8 @@ class LocalHashDataSource : HashService {
         return SaltedHash(salt = saltAsHex, hash = hash)
     }
 
-
     override fun check(plainPassword: String, hashed: SaltedHash): Boolean {
         val hash = DigestUtils.sha256Hex("${hashed.salt}$plainPassword")
         return hash == hashed.hash
     }
-
 }
