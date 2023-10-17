@@ -12,7 +12,7 @@ import java.util.*
 
 class LocalJWTDataSource(private val config: JwtConfiguration) : JWTService {
     override suspend fun generateToken(vararg claims: JWTClaim): Either<AppError, String> {
-      return  tryCatchSuspended {
+        return tryCatchSuspended {
             val token = JWT.create()
                 .withAudience(config.audience)
                 .withIssuer(config.issuer)
@@ -20,7 +20,6 @@ class LocalJWTDataSource(private val config: JwtConfiguration) : JWTService {
             claims.forEach { claim ->
                 token.withClaim(claim.name, claim.value)
             }
-
             token.sign(Algorithm.HMAC256(config.secret))
         }
     }

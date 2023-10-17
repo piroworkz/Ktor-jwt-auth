@@ -1,8 +1,8 @@
 plugins {
+    war
+    id("io.ktor.plugin") version "2.2.1"
     kotlin("jvm") version "1.8.21"
-    id("io.ktor.plugin") version "2.3.3"
     id("org.jetbrains.kotlin.plugin.serialization") version "1.8.21"
-    id("war")
 }
 
 application {
