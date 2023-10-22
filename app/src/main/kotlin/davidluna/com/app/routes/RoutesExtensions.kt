@@ -8,7 +8,7 @@ import io.ktor.server.auth.jwt.*
 import io.ktor.util.pipeline.*
 
 fun PipelineContext<Unit, ApplicationCall>.getCredentials(): Triple<JWTPrincipal, Claim, Claim> {
-    val principal = call.principal<JWTPrincipal>() ?: error("No principal")
+    val principal: JWTPrincipal = call.principal<JWTPrincipal>() ?: error("No principal")
     val user = principal.payload.getClaim(User::username.name)
     val role = principal.payload.getClaim(User::role.name)
     return Triple(principal, user, role)

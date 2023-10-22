@@ -35,7 +35,7 @@ class AuthRoutesTest {
             setBody(loginRequest)
         }
         val actual = response.body<SerializedResponse<SerializedUser>>()
-        assertThat(actual.code.value).isEqualTo(OK)
+        assertThat(actual.code.value).isEqualTo(OK.value)
         assertThat(actual.message).isEqualTo(expected)
     }
 
@@ -77,7 +77,7 @@ class AuthRoutesTest {
                 setBody(loginRequest.copy(username = "voxel@gmail.com${Random.nextInt()}"))
             }
             val actual = response.body<SerializedResponse<Boolean>>()
-            assertThat(actual.code.value).isEqualTo(OK)
+            assertThat(actual.code.value).isEqualTo(OK.value)
             assertThat(actual.message).isEqualTo(expected)
         }
 

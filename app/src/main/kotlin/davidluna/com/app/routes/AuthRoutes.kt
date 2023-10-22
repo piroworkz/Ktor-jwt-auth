@@ -1,13 +1,12 @@
 package davidluna.com.app.routes
 
-import davidluna.com.app.model.SerializedAuthRequest
 import davidluna.com.app.framework.utils.buildFailResponse
 import davidluna.com.app.framework.utils.toDomain
 import davidluna.com.app.framework.utils.toRemote
 import davidluna.com.app.framework.utils.toRemoteUser
+import davidluna.com.app.model.SerializedAuthRequest
 import davidluna.com.domain.AppError
 import davidluna.com.domain.Response
-import davidluna.com.domain.Role
 import davidluna.com.domain.User
 import davidluna.com.usecases.LoginUseCase
 import davidluna.com.usecases.SaveUserUseCase
@@ -19,15 +18,16 @@ import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 
 fun Route.authRouting() {
-
     val loginUseCase by inject<LoginUseCase>()
     val saveUserUseCase by inject<SaveUserUseCase>()
-
     route("/auth") {
         post<SerializedAuthRequest>("/login") {
-            loginUseCase(it.copy(role = Role.ADMIN).toDomain()).fold(
+            loginUseCase(it.toDomain()).fold(
                 ifLeft = { e: AppError -> call.respond(buildFailResponse(e)) },
-                ifRight = { r: Response<User> -> call.respond(HttpStatusCode.OK, r.toRemoteUser()) })
+                ifRight = { r: Response<User> ->
+                    println("<-- $r")
+                    call.respond(HttpStatusCode.OK, r.toRemoteUser())
+                })
         }
 
         post<SerializedAuthRequest>("/register") {
@@ -41,6 +41,9 @@ fun Route.authRouting() {
             get("/me") {
                 val (principal, user, role) = getCredentials()
                 call.respondText("Welcome $user, your assigned role is: $role Token expires: ${principal.payload.expiresAt}")
+            }
+            post("/anotherEndPoint") {
+
             }
         }
     }

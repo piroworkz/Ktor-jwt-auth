@@ -29,4 +29,5 @@ class RemoteUserDataSource(dataBase: MongoDatabase) : UserDataSource {
             collection.replaceOne(eq(MongoUser::username.name, request.username), request.toRemote(saltedHash))
                 .wasAcknowledged()
         }
+
 }
