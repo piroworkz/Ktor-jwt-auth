@@ -7,7 +7,6 @@ plugins {
 dependencies {
     implementation(project(":domain"))
     implementation(libs.arrow.core)
-
     testImplementation(project(":testShared"))
 }
 

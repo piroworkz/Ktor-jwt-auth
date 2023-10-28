@@ -7,7 +7,7 @@ import org.slf4j.event.Level
 
 fun Application.configureMonitoring() {
     install(CallLogging) {
-        level = Level.DEBUG
+        level = Level.TRACE
         filter { call -> call.request.path().startsWith("/") }
     }
 }

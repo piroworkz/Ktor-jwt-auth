@@ -2,6 +2,7 @@ package davidluna.com.app.plugins
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
+import davidluna.com.app.di.Inject.appModule
 import davidluna.com.app.model.SerializedResponse
 import davidluna.com.app.model.SerializedStatusCode
 import davidluna.com.domain.JwtConfiguration
@@ -10,10 +11,9 @@ import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
 import io.ktor.server.response.*
-import org.koin.ktor.ext.inject
 
 fun Application.configureSecurity() {
-    val config: JwtConfiguration by inject()
+    val config: JwtConfiguration = appModule.jwtConfiguration
     authentication {
         jwt(name = "auth-jwt") {
             realm = config.realm

@@ -1,8 +1,9 @@
+@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     war
-    id("io.ktor.plugin") version "2.2.1"
-    kotlin("jvm") version "1.8.21"
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.8.21"
+    alias(libs.plugins.ktor.plugin)
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.kotlinx.serialization)
 }
 
 application {
@@ -19,9 +20,8 @@ dependencies {
     implementation(libs.commons.codec)
     implementation(libs.bundles.ktor.server)
     implementation(libs.bundles.mongo)
-    implementation(libs.bundles.koin)
-    implementation("io.ktor:ktor-client-content-negotiation:2.3.4")
-    implementation("io.ktor:ktor-serialization-gson:2.3.4")
+    implementation(libs.client.content.negotiation)
+    implementation(libs.client.gson)
 }
 
 tasks.jar {

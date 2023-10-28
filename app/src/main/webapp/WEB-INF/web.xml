@@ -7,6 +7,14 @@
             <param-name>io.ktor.ktor.config</param-name>
             <param-value>application.conf</param-value>
         </init-param>
+        <init-param>
+            <param-name>allow-post</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <init-param>
+            <param-name>debug</param-name>
+            <param-value>true</param-value>
+        </init-param>
         <async-supported>true</async-supported>
     </servlet>
     <servlet-mapping>

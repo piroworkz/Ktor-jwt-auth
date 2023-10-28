@@ -1,5 +1,5 @@
 [versions]
-ktor = "2.3.4"
+ktor = "2.3.5"
 kotlin = "1.8.21"
 logback = "1.2.11"
 arrow = "1.2.0"
@@ -26,6 +26,8 @@ server-content-negotiation = { group = "io.ktor", name = "ktor-server-content-ne
 server-servlet = { group = "io.ktor", name = "ktor-server-servlet", version.ref = "ktor" }
 kotlin-serialization-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json-jvm", version.ref = "kotlin" }
 logback-classic = { group = "ch.qos.logback", name = "logback-classic", version.ref = "logback" }
+client-content-negotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor" }
+client-gson = { group = "io.ktor", name = "ktor-serialization-gson", version.ref = "ktor" }
 
 arrow-core = { module = "io.arrow-kt:arrow-core", version.ref = "arrow" }
 commons-codec = { group = "commons-codec", name = "commons-codec", version.ref = "commons-codec" }
@@ -45,9 +47,8 @@ truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
 coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlin-coroutines" }
 
 [bundles]
-ktor-server = ["server-core", "server-auth", "server-auth-jwt", "server-resources", "server-swagger",
-    "server-call-logging", "server-jetty", "server-content-negotiation", "server-servlet", "kotlin-serialization-json", "logback-classic"]
-koin = ["koin-di", "koin-logger"]
+ktor-server = ["server-core", "server-auth", "server-resources", "server-swagger",
+    "server-call-logging", "server-jetty", "server-content-negotiation", "server-servlet", "kotlin-serialization-json", "logback-classic","server-auth-jwt"]
 mongo = ["mongo-db-driver", "mongo-bson"]
 #TESTING
 server-tests = [
@@ -56,4 +57,6 @@ server-tests = [
 
 
 [plugins]
-org-jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "org-jetbrains-kotlin-jvm" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "org-jetbrains-kotlin-jvm" }
+ktor-plugin = { id = "io.ktor.plugin", version.ref = "ktor" }
+kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

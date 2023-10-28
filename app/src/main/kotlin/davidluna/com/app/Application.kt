@@ -9,10 +9,12 @@ fun main(args: Array<String>) {
 }
 
 fun Application.module() {
-    configureKoinDi()
+    log.info("<----------------Starting application")
+    configureDependencyInjection()
     configureSecurity()
     configureHTTP()
     configureMonitoring()
     configureContentNegotiation()
     configureRouting()
 }
+
